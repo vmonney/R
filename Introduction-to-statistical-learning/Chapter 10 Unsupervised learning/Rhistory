@@ -1,0 +1,512 @@
+pr.out = prcomp(USArrests, scale = TRUE)
+names(pr.out)
+pr.out$center
+pr.out$scale
+pr.out$rotation
+dim(pr.out$x)
+## ploting
+biplot(pr.out, scale = 0)
+biplot(pr.out, scale = 0)
+pr.out$rotation = -pr.out$rotation
+pr.out$x = -pr.out$x
+biplot(pr.out, scale = 0)
+pr.out$sdev
+pr.var = pr.out$sdev^2
+pr.var
+pve = pr.var/sum(pr.var)
+pve
+## plotting
+plot(pve, xlab="Principal Component", ylab="Proportion of Variance Explained", ylim= c(0,1), type ="b")
+plot(cumsum(pve), xlab="Principal Component", ylab="Cumulative Proportion of Variance Explaines", ylim=c(0,1), type = "b")
+set.seed(2)
+x = matrix(rnorm(50*2), ncol = 2)
+x[1:25, 1] = x[1:25, 1] + 3
+x[1:25, 2] = x[1:25, 2] - 4
+km.out = kmeans(x, 2, nstart=20)
+km.out$cluster
+plot(x, col=(km.out$cluster+1), main="K-Means Clustering Results with K=2", xlab="", ylab="", pch=20, cex=2)
+set.seed(4)
+km.out = kmeans(x, 3, nstart = 20)
+km.out
+plot(x, col=(km.out$cluster+1), main= "K-Means Clustering Results with K=3", xlab="", ylab="", pch=20, cex=2)
+set.seed(3)
+km.out = kmeans(x, 3, nstart = 1)
+km.out$tot.withinss
+km.out = kmeans(x, 3, nstart = 20)
+km.out$tot.withinss
+km.out = kmeans(x, 3, nstart = 1)
+km.out$tot.withinss
+km.out = kmeans(x, 3, nstart = 20)
+km.out$tot.withinss
+hc.complete = hclust(dist(x), method="complete")
+hc.average = hclust(dist(x), method="average")
+hc.single = hclust(dist(x), method="single")
+par(mfrow=c(1,3))
+plot(hc.complete, main="Complete Linkage", xlab="", sub="", cex=.9)
+par(mfrow=c(1,3))
+plot(hc.complete, main="Complete Linkage", xlab="", sub="", cex=.9)
+plot(hc.average, main="Average Linkage", xlab="", sub="", cex=.9)
+plot(hc.single, main="Single Linkage", xlab="", sub="", cex=.9)
+cutree(hc.single, 4)
+xsc = scale(x, center = FALSE, scale = TRUE)
+plot(hclust(dist(xsc), method = "complete"), main="Hierarchical Clustering with Scaled Observations")
+x = matrix(rnorm(30*3), ncol = 3)
+dd = as.dist(1-cor(t(x)))
+plot(hclust(dd, method = "complete"), main = "Complete Linkage with Correlation-Based Distance", xlab="", sub="")
+library(ISLR)
+nci.labs = NCI60$labs
+nci.data = NCI60$data
+dim(nci.data)
+## cancer types
+nci.labs
+## cancer types
+nci.labs[1:4]
+table(nci.labs)
+pr.out = prcomp(nci.data, scale = TRUE)
+Cols = function(vec){
+cols = rainbow(length(unique(vec)))
+return(cols[as.numeric(as.factor(vec))])
+}
+par(mfrow=c(1,2))
+plot(pr.out$x[,1:2], col=Cols(nci.labs), pch = 19, xlab = "Z1", ylab="Z2")
+plot(pro.out$x[,c(1,3)], col = Cols(nci.labs), pch ) 19, xlab = "Z1", ylab = "Z3")
+plot(pro.out$x[,c(1,3)], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z3")
+plot(pr.out$x[,c(1,3)], col = Cols(nci.labs), pch = 19, xlab = "Z1", ylab = "Z3")
+### proportion of variance explained PVE
+summary(pr.out)
+plot(pr.out)
+pve = 100*pr.out$sdev^2/sum(pr.out$sdev^2)
+par(mfrow=c(1,2))
+plot(pve, type = "o", ylab = "PVE", xlab = "Principal Component", col = "blue")
+plot(cumsum(pve), type = "o", ylab = "Cumulative PVE", xlab = "Principal Component", col = "brown3")
+#other method
+summary(pr.out)$importance[2,]
+summary(pr.out)$importance[3,]
+# scaling the data
+sd.data = scale(nci.data, center = FALSE, scales = TRUE)
+# scaling the data
+sd.data = scale(nci.data, center = FALSE, scale = TRUE)
+par(mfrow=c(1,3))
+data.dist= dist(sd.data)
+# scaling the data
+sd.data = scale(nci.data, center = FALSE, scale = TRUE)
+par(mfrow=c(1,3))
+data.dist= dist(sd.data)
+plot(hclust(data.dist), labels = nci.labs, main="Complete Linkage", xlab="", sub="", ylab = "")
+plot(hclust(data.dist, method = "average"), labels = nci.labs, main="Average Linkage", xlab="", sub="", ylab = "")
+plot(hclust(data.dist, method = "single"), labels = nci.labs, main="Single Linkage", xlab="", sub="", ylab = "")
+hc.out = hclust(dist(sd.data))
+hc.clusters = cutree(hc.out, 4)
+table(hc.clusters, nci.labs)
+par(mfrow=c(1,1))
+plot(hc.out, labels = nci.labs)
+abline(h=139, col="red")
+hc.out
+set.seed(2)
+km.out = kmeans(sd.data, 4, nstart = 20)
+km.clusters = km.out$cluster
+table(km.clusters, hc.clusters)
+hc.out = hclust(dist(pr.out$x[,1:5]))
+hc.out = hclust(dist(pr.out$x[,1:5]))
+plot(hc.out, labels=nci.labs, main="Hier. Clust. on First Five Score Vectors")
+table(cutree(hc.out, 4), nci.labs)
+dissimilarity_matrix = matrix(c(0,0.3,0.4,0.7,0.3,0,0.5,0.8,0.4,0.5,0,0.45,0.7,0.8,0.45,0))
+dissimilarity_matrix = matrix(c(0,0.3,0.4,0.7,0.3,0,0.5,0.8,0.4,0.5,0,0.45,0.7,0.8,0.45,0), nrow = 4, ncol = 4)
+dissimilarity_matrix
+dissimilarity_matrix = as.dist(dissimilarity_matrix)
+dissimilarity_matrix
+hc.out = hclust(dissimilarity_matrix)
+hc.out
+plot(hc.out)
+plot(hclust(dissimilarity_matrix, method = "complete"))
+plot(hclust(dissimilarity_matrix, method = "single"))
+plot(hclust(dissimilarity_matrix, method = "complete"))
+# Part (a):
+#
+DF = data.frame( x1=c(1,1,0,5,6,4), x2=c(4,3,4,1,2,0) )
+n = dim(DF)[1]
+K = 2
+# Part (b): Assign each point to a cluster
+#
+labels = sample( 1:K, n, replace=TRUE )
+plot( DF$x1, DF$x2, cex=2.0, pch=19, col=(labels+1), xlab="gene index", ylab="unpaired t-value" )
+grid()
+# Part (c): Compute the centroids of each cluster
+#
+cents = matrix( nrow=K, ncol=2 )
+# Part (c): Compute the centroids of each cluster
+#
+cents = matrix(nrow=K, ncol=2 )
+cents = matrix(nrow=K, ncol=2 )
+for(l in 1:K ){
+samps = labels==l
+cents[l,] = apply( DF[samps,], 2, mean )
+}
+# Part (d): Assign each sample to the centroid it is closest too:
+#
+new_labels = rep( NA, n )
+new_labels = rep( NA, n )
+for( si in 1:n ){
+smallest_norm = +Inf
+for( l in 1:K ){
+nm = norm( as.matrix( DF[si,] - cents[l,] ), type="2" )
+if( nm < smallest_norm ){
+smallest_norm = nm
+new_labels[si] = l
+}
+}
+}
+#
+if( sum( new_labels == labels ) == n ){
+break
+}else{
+labels = new_labels
+}
+}
+#
+cents = matrix(nrow=K, ncol=2 )
+for(l in 1:K ){
+samps = labels==l
+cents[l,] = apply( DF[samps,], 2, mean )
+}
+# Part (d): Assign each sample to the centroid it is closest too:
+#
+new_labels = rep( NA, n )
+for( si in 1:n ){
+smallest_norm = +Inf
+for( l in 1:K ){
+nm = norm( as.matrix( DF[si,] - cents[l,] ), type="2" )
+if( nm < smallest_norm ){
+smallest_norm = nm
+new_labels[si] = l
+}
+}
+}
+# Part (e): Repeat until labels stop changing:
+#
+if( sum( new_labels == labels ) == n ){
+break
+}else{
+labels = new_labels
+}
+}
+## Exercise 2
+dissimilarity_matrix = matrix(c(0,0.3,0.4,0.7,0.3,0,0.5,0.8,0.4,0.5,0,0.45,0.7,0.8,0.45,0), nrow = 4, ncol = 4)
+dissimilarity_matrix = as.dist(dissimilarity_matrix)
+dissimilarity_matrix
+plot(hclust(dissimilarity_matrix, method = "complete"))
+plot(hclust(dissimilarity_matrix, method = "single"))
+### Exercise 3
+set.seed(0)
+# Part (a):
+#
+DF = data.frame( x1=c(1,1,0,5,6,4), x2=c(4,3,4,1,2,0) )
+n = dim(DF)[1]
+K = 2
+# Part (b): Assign each point to a cluster
+#
+labels = sample( 1:K, n, replace=TRUE )
+plot( DF$x1, DF$x2, cex=2.0, pch=19, col=(labels+1), xlab="gene index", ylab="unpaired t-value" )
+grid()
+while( TRUE ){
+# Part (c): Compute the centroids of each cluster
+#
+cents = matrix( nrow=K, ncol=2 )
+for( l in 1:K ){
+samps = labels==l
+cents[l,] = apply( DF[samps,], 2, mean )
+}
+# Part (d): Assign each sample to the centroid it is closest too:
+#
+new_labels = rep( NA, n )
+for( si in 1:n ){
+smallest_norm = +Inf
+for( l in 1:K ){
+nm = norm( as.matrix( DF[si,] - cents[l,] ), type="2" )
+if( nm < smallest_norm ){
+smallest_norm = nm
+new_labels[si] = l
+}
+}
+}
+# Part (e): Repeat until labels stop changing:
+#
+if( sum( new_labels == labels ) == n ){
+break
+}else{
+labels = new_labels
+}
+}
+# Part (f): Plot the updated cluster labels
+#
+plot( DF$x1, DF$x2, cex=2.0, pch=19, col=(labels+1), xlab="gene index", ylab="unpaired t-value" )
+grid()
+## Part (c) generate data:
+##
+n = 1000 # the number of genes
+m = 100 # the number of tissue samples
+##n = 20
+##m = 5
+mu_A = 0.1 ## the machines are mostly the same but a bit different
+sigma_A = 1.0
+mu_B = -0.3
+sigma_B = 4.0
+mu_C = 0.0 # the control and the treatment means are similar
+mu_T = 0.25
+X = matrix(0, nrow=n, ncol=m)
+prob_of_machine_A = seq(1, 1.e-6, length.out=m)
+machine = c()
+treatment = c()
+for( jj in 1:m ){
+## What machine did we use.  We slowly change from machine A to machine B.
+##
+machine_used = sample(c('A', 'B'), size=1, prob=c(prob_of_machine_A[jj], 1-prob_of_machine_A[jj]))
+machine = c(machine, machine_used)
+## Is this a control or a treatment sample:
+##
+type = sample(c('C', 'T'), size=1, prob=c(0.5, 0.5))
+treatment = c(treatment, type)
+if( machine_used=='A' ){
+if( type=='C' ){
+x = rnorm(n, mean=(mu_A+mu_C), sd=sigma_A)
+}else{
+x = rnorm(n, mean=(mu_A+mu_T), sd=sigma_A)
+}
+}else{
+if( type=='C' ){
+x = rnorm(n, mean=(mu_B+mu_C), sd=sigma_B)
+}else{
+x = rnorm(n, mean=(mu_B+mu_T), sd=sigma_B)
+}
+}
+X[, jj] = x
+}
+pr.out = prcomp(X, scale=TRUE)
+##print(summary(pr.out))
+## Lets print the fraction of variance explained for the first 10 PC:
+##
+print(pr.out$sdev[1:10]^2/sum(pr.out$sdev^2))
+## Performe the suggested transformation:
+##
+X_transformed = X - pr.out$x[,1] %*% t(pr.out$rotation[, 1])
+## Run the T-test:
+##
+print(t.test(X_transformed[, treatment=='C'], X_transformed[, treatment=='T']))
+## Split into two groups, normalize, and recombine:
+##
+machine_A = machine=='A'
+X_A = X[, machine_A]
+machine_B = machine=='B'
+X_B = X[, machine_B]
+print(sprintf('mu_A= %f; mean(X_A)= %f; mu_B= %f; mean(X_B)= %f', mu_A, mean(X_A), mu_B, mean(X_B)))
+X_2 = cbind(X_A - mean(X_A), X_B - mean(X_B))
+pr.out = prcomp(X_2, scale=TRUE)
+##print(summary(pr.out))
+## Lets print the fraction of variance explained for the first 10 PC:
+##
+print(pr.out$sdev[1:10]^2/sum(pr.out$sdev^2))
+## Run the T-test:
+##
+print(t.test(X_2[, treatment=='C'], X_2[, treatment=='T']))
+set.seed(0)
+# Scale each observation (not the features):
+#
+USA_scaled = t(scale(t(USArrests)))
+# The correlation of each sample with the other samples:
+#
+Rij = cor(t(USA_scaled)) # -1 <= Rij <= +1
+OneMinusRij = 1 - Rij # 0 <= 1-Rij <= +2
+X = OneMinusRij[lower.tri(OneMinusRij)]
+D = as.matrix( dist( USA_scaled )^2 )
+Y = D[lower.tri(D)]
+plot( X, Y )
+summary( X/Y )
+# chap_10_prob_8.R (Using prcomp on the USArrests data set)
+set.seed(0)
+pr.out = prcomp(USArrests, scale=TRUE)
+# Using the output from prcomp:
+#
+pr.var = pr.out$sdev^2
+pve_1 = pr.var / sum(pr.var)
+# Apply Equation 10.8 directly:
+#
+USArrests_scaled = scale( USArrests )
+denom = sum( apply( USArrests_scaled^2, 2, sum ) )
+Phi = pr.out$rotation
+USArrests_projected = USArrests_scaled %*% Phi # this is the same as pr.out$x
+numer = apply( pr.out$x^2, 2, sum )
+pve_2 = numer / denom
+print(pve_1)
+print(pve_2)
+print(pve_1 - pve_2)
+set.seed(0)
+# Part (a-b):
+#
+hclust.complete = hclust( dist(USArrests), method="complete" )
+plot( hclust.complete, xlab="", sub="", cex=0.9 )
+ct = cutree( hclust.complete, k=3 ) # number of clusters to cut into
+# Print which states go into each cluster:
+#
+for( k in 1:3 ){
+print(k)
+print( rownames( USArrests )[ ct == k ] )
+}
+#
+hclust.complete.scale = hclust( dist(scale(USArrests,center=FALSE)), method="complete" )
+plot( hclust.complete.scale, xlab="", sub="", cex=0.9 )
+if( save_plots ){ dev.off() }
+ct = cutree( hclust.complete.scale, k=3 ) # number of clusters to cut into
+# Print which states go into each cluster in this case:
+#
+for( k in 1:3 ){
+print(k)
+print( rownames( USArrests )[ ct == k ] )
+#
+hclust.complete.scale = hclust( dist(scale(USArrests,center=FALSE)), method="complete" )
+plot( hclust.complete.scale, xlab="", sub="", cex=0.9 )
+ct = cutree( hclust.complete.scale, k=3 ) # number of clusters to cut into
+# Print which states go into each cluster in this case:
+#
+for( k in 1:3 ){
+print(k)
+print( rownames( USArrests )[ ct == k ] )
+}
+# Part (a) generate data:
+#
+K = 3  # the number of classes
+n = 20 # the number of samples per class
+p = 50 # the number of variables
+# Create data for class 1:
+X_1 = matrix( rnorm(n*p), nrow=n, ncol=p )
+for( row in 1:n ){
+X_1[row,] = X_1[row,] + rep( 1, p )
+}
+# Create data for class 2:
+X_2 = matrix( rnorm(n*p), nrow=n, ncol=p )
+for( row in 1:n ){
+X_2[row,] = X_2[row,] + rep( -1, p )
+}
+# Create data for class 3:
+X_3 = matrix( rnorm(n*p), nrow=n, ncol=p )
+for( row in 1:n ){
+X_3[row,] = X_3[row,] + c( rep( +1, p/2 ), rep( -1, p/2 ) )
+}
+X = rbind( X_1, X_2, X_3 )
+labels = c( rep(1,n), rep(2,n), rep(3,n) ) # the "true" labels of the points
+pr.out = prcomp( X, scale=TRUE )
+plot( pr.out$x[,1], pr.out$x[,2], col=labels, pch=19 )
+grid()
+# Part (c):
+#
+kmean.out = kmeans( X, centers=3, nstart=50 )
+table( kmean.out$cluster, labels )
+# Part (d):
+#
+kmean.out = kmeans( X, centers=2, nstart=50 )
+table( kmean.out$cluster, labels )
+kmean.out = kmeans( X, centers=4, nstart=50 )
+table( kmean.out$cluster, labels )
+Part (f):
+#
+kmean.out = kmeans( pr.out$x[,c(1,2)], centers=3, nstart=50 )
+# Part (g):
+kmean.out = kmeans( pr.out$x[,c(1,2)], centers=3, nstart=50 )
+table( kmean.out$cluster, labels )
+Xs = scale( X )
+kmean.out = kmeans( Xs, centers=3, nstart=50 )
+table( kmean.out$cluster, labels )
+# chap_10_prob_11.R (Clustering gene expression data)
+set.seed(0)
+# Part (a):
+#
+DF = read.csv("Ch10Ex11.csv",header=FALSE)
+DF = t(DF) # want each row to represent a sample ... should have n=40 samples/rows
+# Part (b):
+#
+D = dist(DF)                  # "n x n matrix of Euclidean distance dissimilarities"
+D = as.dist( 1 - cor(t(DF)) ) # cor computes the correlation of *columns* so we need to take the transpose of DF
+hclust.cor = hclust( D, method="complete" )
+#hclust.cor = hclust( D, method="average" )
+#hclust.cor = hclust( D, method="single" )
+# How well does our clustering predict health vs. diseased:
+#
+print( table( predicted=cutree( hclust.cor, k=2 ), truth=c( rep(0,20), rep(1,20) ) ) )
+plot( hclust.cor, xlab="", sub="", cex=0.9 )
+# Part (c):
+#
+# Compute the unpaired t-test between the means of the gene response in each cluster:
+#
+predicted=cutree( hclust.cor, k=2 )
+n1 = apply( DF[ predicted==1, ], 2, length ) # the number of samples (number of patients in each cluster)
+n2 = apply( DF[ predicted==2, ], 2, length )
+m1 = apply( DF[ predicted==1, ], 2, mean ) # the means across the 1000 genes in each cluster
+m2 = apply( DF[ predicted==2, ], 2, mean )
+v1 = apply( DF[ predicted==1, ], 2, var ) # the variances across the 1000 genes in each cluster
+v2 = apply( DF[ predicted==2, ], 2, var )
+pooled_variance = sqrt( v1 / n1 + v2 / n2 )
+t_value = ( m1 - m2 ) / pooled_variance
+plot( t_value, xlab="gene index", ylab="unpaired t-value" )
+setwd("~/data science/R/Introduction to statistical learning/Chapter 10 Unsupervised learning")
+# chap_10_prob_11.R (Clustering gene expression data)
+set.seed(0)
+setwd("~/data science/R/Introduction to statistical learning/Chapter 10 Unsupervised learning")
+# Part (a):
+#
+DF = read.csv("Ch10Ex11.csv",header=FALSE)
+DF = t(DF) # want each row to represent a sample ... should have n=40 samples/rows
+# Part (b):
+#
+D = dist(DF)                  # "n x n matrix of Euclidean distance dissimilarities"
+D = as.dist( 1 - cor(t(DF)) ) # cor computes the correlation of *columns* so we need to take the transpose of DF
+hclust.cor = hclust( D, method="complete" )
+#hclust.cor = hclust( D, method="average" )
+#hclust.cor = hclust( D, method="single" )
+# How well does our clustering predict health vs. diseased:
+#
+print( table( predicted=cutree( hclust.cor, k=2 ), truth=c( rep(0,20), rep(1,20) ) ) )
+plot( hclust.cor, xlab="", sub="", cex=0.9 )
+# Part (c):
+#
+# Compute the unpaired t-test between the means of the gene response in each cluster:
+#
+predicted=cutree( hclust.cor, k=2 )
+n1 = apply( DF[ predicted==1, ], 2, length ) # the number of samples (number of patients in each cluster)
+n2 = apply( DF[ predicted==2, ], 2, length )
+m1 = apply( DF[ predicted==1, ], 2, mean ) # the means across the 1000 genes in each cluster
+m2 = apply( DF[ predicted==2, ], 2, mean )
+v1 = apply( DF[ predicted==1, ], 2, var ) # the variances across the 1000 genes in each cluster
+v2 = apply( DF[ predicted==2, ], 2, var )
+pooled_variance = sqrt( v1 / n1 + v2 / n2 )
+t_value = ( m1 - m2 ) / pooled_variance
+plot( t_value, xlab="gene index", ylab="unpaired t-value" )
+# chap_10_prob_11.R (Clustering gene expression data)
+set.seed(0)
+setwd("~/data science/R/Introduction to statistical learning/Chapter 10 Unsupervised learning")
+# Part (a):
+#
+DF = read.csv("Ch10Ex11.csv",header=FALSE)
+DF = t(DF) # want each row to represent a sample ... should have n=40 samples/rows
+# Part (b):
+#
+D = dist(DF)                  # "n x n matrix of Euclidean distance dissimilarities"
+D = as.dist( 1 - cor(t(DF)) ) # cor computes the correlation of *columns* so we need to take the transpose of DF
+hclust.cor = hclust( D, method="complete" )
+#hclust.cor = hclust( D, method="average" )
+#hclust.cor = hclust( D, method="single" )
+# How well does our clustering predict health vs. diseased:
+#
+print( table( predicted=cutree( hclust.cor, k=2 ), truth=c( rep(0,20), rep(1,20) ) ) )
+plot( hclust.cor, xlab="", sub="", cex=0.9 )
+#
+# Compute the unpaired t-test between the means of the gene response in each cluster:
+#
+predicted=cutree( hclust.cor, k=2 )
+n1 = apply( DF[ predicted==1, ], 2, length ) # the number of samples (number of patients in each cluster)
+n2 = apply( DF[ predicted==2, ], 2, length )
+m1 = apply( DF[ predicted==1, ], 2, mean ) # the means across the 1000 genes in each cluster
+m2 = apply( DF[ predicted==2, ], 2, mean )
+v1 = apply( DF[ predicted==1, ], 2, var ) # the variances across the 1000 genes in each cluster
+v2 = apply( DF[ predicted==2, ], 2, var )
+pooled_variance = sqrt( v1 / n1 + v2 / n2 )
+t_value = ( m1 - m2 ) / pooled_variance
+plot( t_value, xlab="gene index", ylab="unpaired t-value" )

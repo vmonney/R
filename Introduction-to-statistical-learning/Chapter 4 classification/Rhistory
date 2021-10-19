@@ -1,0 +1,440 @@
+library(ISLR)
+names(Smarket)
+dim(Smarket)
+summary(Smarket)
+cor(Smarket)
+cor(Smarket[,-9])
+attach(Smarket)
+plot(Volume)
+glm.fit = glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket, family = binomial)
+summary(glm.fit)
+coef(glm.fit)
+summary(glm.fit)$coef
+summary(glm.fit)$coef[,4]
+glm.probs = predict(glm.fit, type = "response")
+glm.probs[1:10]
+contrasts(Direction)
+glm.pred = rep("Down", 1250)
+glm.pred[glm.probs>0.5]= "Up"
+table(glm.pred, Direction)
+(507+145)/1250
+mean(glm.pred == Direction)
+train = (Year<2005)
+Smarket.2005 =Smarket[!train]
+dim(Smarket.2005)
+train = (Year<2005)
+Smarket.2005 =Smarket[!train,]
+dim(Smarket.2005)
+dim(Smarket.2005)
+Direction.2005 = Direction[!train,]
+Direction.2005 = Direction[!train]
+glm.fit = glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket, family = binomial, subset = train)
+glm.probs = predict(glm.fit, Smarket.2005, type = "response")
+glm.pred = rep("Down", 252)
+glm.pred[glm.probs>0.5]= "Up"
+table(glm.pred, Direction.2005)
+mean(glm.pred == Direction)
+mean(glm.pred == Direction.2005)
+mean(glm.pred != Direction.2005)
+glm.fit =glm( Direction ~ Lag1+Lag2 ,data= Smarket , family = binomial ,
+subset = train )
+library(MASS)
+lda.fit = lda(Direction ~ lag1 + lag2, data = Smarket, substet = train)
+lda.fit
+lda.fit = lda(Direction ~ Lag1 + Lag2, data = Smarket, substet = train)
+lda.fit
+plot(lda.fit)
+lda.pred = predict(lda.fit, Smarket.2005)
+names(lda.pred)
+table(lda.class, Direction.2005)
+lda.class = lda.pred$class
+table(lda.class, Direction.2005)
+mean(lda.class == Direction.2005)
+sum(lda.pred$posterior[,1]>=0.5)
+sum(lda.pred$posterior[,1]<0.5)
+sum(lda.pred$posterior[,1]>=.5)
+sum(lda.pred$posterior[,1]<.5)
+library(class)
+train.X = cbind(Lag1, Lag2)[train]
+head(train.X)
+test.X = cbind(Lag1, Lag2)[!train]
+train.Direction = Direction[train]
+set.seed(1)
+knn.pred = knn(train.X, test.X, train.Direction, k=1)
+table(knn.pred, Direction.2005)
+library(class)
+train.X = cbind(Lag1, Lag2)[train,]
+test.X = cbind(Lag1, Lag2)[!train,]
+head(train.X)
+library(class)
+train.X = cbind(Lag1, Lag2)[train,]
+test.X = cbind(Lag1, Lag2)[!train,]
+train.Direction = Direction[train]
+set.seed(1)
+knn.pred = knn(train.X, test.X, train.Direction, k=1)
+table(knn.pred, Direction.2005)
+mean(knn.pred == Direction.2005)
+knn.pred = knn(train.X, test.X, train.Direction, k=3)
+table(knn.pred, Direction.2005)
+mean(knn.pred == Direction.2005)
+dim(Caravan)
+dim(Caravan)
+attach(Caravan)
+summary(Purchase)
+standartized.X = scale(Caravan[,-86])
+var(Caravan[,1])
+var(Caravan[,2])
+var(standartized.X[,1])
+var(standartized.X[,2])
+train.X = standardized.X[-test,]
+test.X = standardized.X[test,]
+standardized.X = scale(Caravan[,-86])
+var(Caravan[,1])
+var(Caravan[,2])
+var(standardized.X[,1])
+var(standardized.X[,2])
+test = 1:1000
+train.X = standardized.X[-test,]
+test.X = standardized.X[test,]
+test.Y = Purchase[test,]
+train.Y = Purchase[-test]
+test.Y = Purchase[test]
+knn.pred = knn(train.X, test.X, train.Y, k=1)
+mean(test.Y != knn.pred)
+mean(test.Y != "No")
+?dnorm
+dnorm(4,10,6)
+p_x_yes <- dnorm(4,10,6)
+p_x_no <- dnorm(4,0,6)
+p_yes <- 0.8
+p_no <- 0.2
+p_yes_x <- p_x_yes*p_yes / (p_x_yes*p_yes + p_x_no*p_no)
+p_yes_x
+library(ISLR)
+attach(Weekly)
+library(ISLR)
+attach(Weekly)
+dim(weekly)
+dim(Weekly)
+dim(Weekly)
+summary(Weekly)
+plot(Weekly$Today)
+plot(Direction)
+cor(Weekly)
+cor(Weekly[,-9])
+Weekly$num_direction <- 1
+Weekly$num_direction
+Weekly[Weekly$Direction=="Down","num_direction"] <- -1
+Weekly_num_direction
+Weekly$num_direction
+cor(Weekly[,-9])
+?glm
+log_reg <- glm(Direction ~ Lag1 + Lag2 +Lag3 + Lag4 + Lag5 + Volume, family = binomial, data = Weekly)
+summary(log_reg)
+?predict
+log_reg <- glm(Direction ~ Lag1 + Lag2 +Lag3 + Lag4 + Lag5 + Volume, family = binomial, data = Weekly)
+summary(log_reg)
+## only Lag2 seems to be a litlle significant
+log_probs <- predict(log_reg, type = "response")
+log_pred <- rep("Down", 1089)
+log_pred[log_probs>0.5] = "Up"
+log_pred
+table(log_pred, Direction)
+mean(log_pred == Direction)
+train <- (Year<2009)
+Weekly_test <- Weekly[!train,]
+dim(Weekly_test)
+Direction_test <- Direction[!train]
+log_reg_d <- glm(Direction ~ Lag2, family = binomial, data = Weekly, subset = train)
+train <- (Year<2009)
+Weekly_test <- Weekly[!train,]
+Direction_test <- Direction[!train]
+log_reg_d <- glm(Direction ~ Lag2, family = binomial, data = Weekly, subset = train)
+log_reg_d_probs <- predict(log_reg_d, Weekly_test, type = "response")
+log_pred_test <- rep("Down", 104)
+log_pred_test[log_reg_d_probs>0.5] = "Up"
+table(log_pred_test,Direction_test)
+mean(log_pred_test == Direction_test)
+library(MASS)
+?lda
+lda.fit <- lda(Direction ~ Lag2, data = Weekly, subset = train)
+plot(lda.fit)
+lda.fit <- lda(Direction ~ Lag2, data = Weekly, subset = train)
+lda.pred <- predict(lda.fit, Weekly_test)
+lda.pred
+table(lda.pred$class, Direction_test)
+mean(lda.pred$class == Direction_test)
+qda.fit <- qda(Direction ~ Lag2, data = Weekly, subset = train)
+qda.pred <- predict(qda.fit, Weekly_test)
+table(qda.pred$class, Direction_test)
+mean(qda.pred$class == Direction_test)
+?knn
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+library(class)
+train.Lag2 <- Lag2[train]
+test.Lag2 <-  Lag2[!train]
+train.Direction <- Direction[train]
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+mean(knn.pred == Direction_test)
+dim(train.Lag2)
+library(class)
+train.Lag2 <- Lag2[train,]
+test.Lag2 <-  Lag2[!train,]
+train.Direction <- Direction[train]
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+dim(train.Lag2)
+train.Lag2 <- Weekly$Lag2[train]
+test.Lag2 <-  Weekly$Lag2[!train,]
+train.Direction <- Direction[train]
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+dim(train.Lag2)
+train.Lag2 <- Weekly[train,Lag2]
+train
+head(Weekly)
+Weekly[train]
+Weekly[train,]
+Weekly[train,Lag2]
+Weekly[train,"Lag2"]
+train.Lag2 <- Weekly[train,"Lag2"]
+test.Lag2 <-  Weekly[!train,"Lag2"]
+train.Direction <- Direction[train]
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+dim(train.Lag2)
+dim(train.Direction)
+dim(train.Lag2)
+train.Lag2 <- Weekly[train,"Lag2"]
+train.Lag2
+dim(train.Lag2)
+train.Lag2 <- data.frame(Lag2[train])
+train.Lag2
+dim(train.Lag2)
+train.Lag2 <- data.frame(Lag2[train])
+test.Lag2 <-  data.frame(lag2[!train])
+train.Direction <- data.frame(Direction[train])
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+train.Lag2 <- data.frame(Lag2[train])
+test.Lag2 <-  data.frame(Lag2[!train])
+train.Direction <- data.frame(Direction[train])
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+dim(train.Direction)
+dim(train.Lag2)
+#g KNN with K = 1
+library(class)
+train.Lag2 <- data.frame(Lag2[train])
+test.Lag2 <-  data.frame(Lag2[!train])
+train.Direction <- data.frame(Direction[train])
+knn.pred <- knn(train.Lag2,test.Lag2,train.Direction, k=1)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=1)
+train.Direction <- Direction[train]
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=1)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=2)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=3)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=4)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=5)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=6)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=7)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=8)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=9)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=10)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=12)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=4)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=3)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=3)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=3)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+knn.pred <- knn(train = train.Lag2,test = test.Lag2,cl = train.Direction, k=3)
+table(knn.pred, Direction_test)
+mean(knn.pred == Direction_test)
+contrasts(Direction)
+contrasts(Weekly$Direction)
+#
+# Written by:
+# --
+# John L. Weatherwax                2009-04-21
+#
+# email: wax@alum.mit.edu
+#
+# Please send comments and especially bug reports to the
+# above email address.
+#
+# EPage 386
+#
+#-----
+save_plots = F
+if( ! require("ISLR") ){ install.packages("ISLR") }
+if( ! require("MASS") ){ install.packages("MASS") }
+if( ! require("class") ){ install.packages("class") }
+set.seed(0)
+vt100ClearScreen <- function(...) cat("\033[2J")
+vt100ClearScreen()
+# Part (a):
+Direction = Weekly$Direction
+Weekly$Direction = NULL
+Weekly$NumericDirection = as.numeric( Direction ) # Maps Down=>1 and Up=>2
+Weekly$NumericDirection[ Weekly$NumericDirection==1 ] = -1 # Maps Down=>-1 and Up=>2
+Weekly$NumericDirection[ Weekly$NumericDirection==2 ] = +1 # Maps Down=>-1 and Up=>+1
+# Look at the correlation between the output and the input lags:
+#
+Weekly.cor = cor(Weekly)
+# b: logistic regression to predict Direction as a function of 5 lag variables + volume:
+#
+Weekly$NumericDirection = NULL
+Weekly$Direction = Direction
+five_lag_model = glm( Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data=Weekly, family=binomial )
+print( summary(five_lag_model) )
+print( contrasts( Weekly$Direction ) )
+# c: the confusion matrix:
+#
+p_hat = predict( five_lag_model, newdata=Weekly, type="response" )
+y_hat = rep( "Down", length(p_hat) )
+y_hat[ p_hat > 0.5 ] = "Up"
+CM = table( predicted=y_hat, truth=Weekly$Direction )
+print( CM )
+print( sprintf( "LR (all features): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+# d: logistic regression using only Lag2 as the predictor (since it is the most significant predictor)
+#
+Weekly.train = ( Weekly$Year >= 1990 ) & ( Weekly$Year <= 2008 ) # our training set
+Weekly.test = ( Weekly$Year >= 2009 ) # our testing set
+lag2_model = glm( Direction ~ Lag2, data=Weekly, family=binomial, subset=Weekly.train )
+# CM on test data :
+#
+p_hat = predict( lag2_model, newdata=Weekly[Weekly.test,], type="response" )
+y_hat = rep( "Down", length(p_hat) )
+y_hat[ p_hat > 0.5 ] = "Up"
+CM = table( predicted=y_hat, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "LR (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#e: Use LDA
+#
+lda.fit = lda( Direction ~ Lag2, data=Weekly, subset=Weekly.train )
+lda.predict = predict( lda.fit, newdata=Weekly[Weekly.test,] )
+CM = table( predicted=lda.predict$class, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "LDA (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#f: Use QDA
+#
+qda.fit = qda( Direction ~ Lag2, data=Weekly, subset=Weekly.train )
+qda.predict = predict( qda.fit, newdata=Weekly[Weekly.test,] )
+CM = table( predicted=qda.predict$class, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "QDA (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#g: KNN
+#
+X.train = data.frame( Lag2=Weekly[ Weekly.train, ]$"Lag2" )
+Y.train = Weekly[ Weekly.train, ]$"Direction"
+X.test = data.frame( Lag2=Weekly[ Weekly.test, ]$"Lag2" )
+y_hat_k_1 = knn( X.train, X.test, Y.train, k=1, use.all=FALSE )
+CM = table( predicted=y_hat_k_1, truth=Weekly[ Weekly.test, ]$Direction )
+print( CM )
+print( sprintf( "KNN (k=1): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+y_hat_k_3 = knn( X.train, X.test, Y.train, k=3, use.all=FALSE )
+CM = table( predicted=y_hat_k_3, truth=Weekly[ Weekly.test, ]$Direction )
+print( CM )
+print( sprintf( "KNN (k=3): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+# Part (a):
+Direction = Weekly$Direction
+Weekly$Direction = NULL
+Weekly$NumericDirection = as.numeric( Direction ) # Maps Down=>1 and Up=>2
+Weekly$NumericDirection[ Weekly$NumericDirection==1 ] = -1 # Maps Down=>-1 and Up=>2
+Weekly$NumericDirection[ Weekly$NumericDirection==2 ] = +1 # Maps Down=>-1 and Up=>+1
+# Look at the correlation between the output and the input lags:
+#
+Weekly.cor = cor(Weekly)
+# b: logistic regression to predict Direction as a function of 5 lag variables + volume:
+#
+Weekly$NumericDirection = NULL
+Weekly$Direction = Direction
+five_lag_model = glm( Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data=Weekly, family=binomial )
+print( summary(five_lag_model) )
+print( contrasts( Weekly$Direction ) )
+# c: the confusion matrix:
+#
+p_hat = predict( five_lag_model, newdata=Weekly, type="response" )
+y_hat = rep( "Down", length(p_hat) )
+y_hat[ p_hat > 0.5 ] = "Up"
+CM = table( predicted=y_hat, truth=Weekly$Direction )
+print( CM )
+print( sprintf( "LR (all features): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+# d: logistic regression using only Lag2 as the predictor (since it is the most significant predictor)
+#
+Weekly.train = ( Weekly$Year >= 1990 ) & ( Weekly$Year <= 2008 ) # our training set
+Weekly.test = ( Weekly$Year >= 2009 ) # our testing set
+lag2_model = glm( Direction ~ Lag2, data=Weekly, family=binomial, subset=Weekly.train )
+# CM on test data :
+#
+p_hat = predict( lag2_model, newdata=Weekly[Weekly.test,], type="response" )
+y_hat = rep( "Down", length(p_hat) )
+y_hat[ p_hat > 0.5 ] = "Up"
+CM = table( predicted=y_hat, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "LR (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#e: Use LDA
+#
+lda.fit = lda( Direction ~ Lag2, data=Weekly, subset=Weekly.train )
+lda.predict = predict( lda.fit, newdata=Weekly[Weekly.test,] )
+CM = table( predicted=lda.predict$class, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "LDA (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#f: Use QDA
+#
+qda.fit = qda( Direction ~ Lag2, data=Weekly, subset=Weekly.train )
+qda.predict = predict( qda.fit, newdata=Weekly[Weekly.test,] )
+CM = table( predicted=qda.predict$class, truth=Weekly[Weekly.test,]$Direction )
+print( CM )
+print( sprintf( "QDA (only Lag2): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+#g: KNN
+#
+X.train = data.frame( Lag2=Weekly[ Weekly.train, ]$"Lag2" )
+Y.train = Weekly[ Weekly.train, ]$"Direction"
+X.test = data.frame( Lag2=Weekly[ Weekly.test, ]$"Lag2" )
+y_hat_k_1 = knn( X.train, X.test, Y.train, k=1, use.all=FALSE )
+CM = table( predicted=y_hat_k_1, truth=Weekly[ Weekly.test, ]$Direction )
+print( CM )
+print( sprintf( "KNN (k=1): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
+y_hat_k_3 = knn( X.train, X.test, Y.train, k=3, use.all=FALSE )
+CM = table( predicted=y_hat_k_3, truth=Weekly[ Weekly.test, ]$Direction )
+print( CM )
+print( sprintf( "KNN (k=3): overall fraction correct= %10.6f", ( CM[1,1] + CM[2,2] ) / sum(CM) ) )
