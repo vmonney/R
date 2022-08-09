@@ -12,7 +12,7 @@ Projects from course 1 and 2 are some Rmarkdown reports. Projects from course 3,
 Preview files on GitHub:
 1. Go to the desired Project folder and click on the project file ".html"
 2. click "view raw" and copy the url
-3. Paste the url into https://raw.githack.com
+3. Paste the url into https://htmlpreview.github.io/
 4. Use the “url in production” url to see the rendered version
 5. paste the new url in a new window of your browser.
 
