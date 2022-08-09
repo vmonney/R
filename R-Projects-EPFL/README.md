@@ -11,11 +11,8 @@ Projects from course 1 and 2 are some Rmarkdown reports. Projects from course 3,
 ## __How to view my Reports__
 Preview files on GitHub:
 1. Go to the desired Project folder and click on the project file ".html"
-2. click "view raw" and copy the url
+2. click on the three dots ... and copy the permalink.
 3. Paste the url into https://htmlpreview.github.io/
-4. Use the “url in production” url to see the rendered version
-5. paste the new url in a new window of your browser.
-
 
 ## __ How to view my Shiny applications__
 
